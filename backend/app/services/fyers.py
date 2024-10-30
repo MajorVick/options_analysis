@@ -4,7 +4,7 @@ from fyers_apiv3 import fyersModel
 import requests
 import time
 import json
-from core.config import settings
+from app.core.config import settings
 
 class FyersService:
     BASE_URL = "https://api.fyers.in"

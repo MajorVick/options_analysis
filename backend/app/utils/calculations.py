@@ -1,8 +1,8 @@
 # backend/app/utils/calculations.py
 
 import pandas as pd
-from services.brokers.fyers import FyersService
-from utils.symbol_utils import get_symbol
+from app.services.fyers import FyersService
+from app.utils.symbol_utils import get_symbol
 
 def get_option_chain_data(instrument_name: str, expiry_date: str, side: str) -> pd.DataFrame:
     fyers_service = FyersService()
@@ -30,4 +30,9 @@ def get_option_chain_data(instrument_name: str, expiry_date: str, side: str) -> 
             })
 
     df = pd.DataFrame(rows)
+    return df
+
+def calculate_margin_and_premium(df: pd.DataFrame) -> pd.DataFrame:
+    df['margin'] = 1000  # Dummy value for margin
+    df['premium'] = 50   # Dummy value for premium
     return df

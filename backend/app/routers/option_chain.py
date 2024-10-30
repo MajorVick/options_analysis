@@ -1,9 +1,9 @@
 # backend/app/routers/option_chain.py
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
-from utils.calculations import get_option_chain_data, calculate_margin_and_premium
-from models.option_chain import OptionChainData
-from services.brokers.upstox_service import UpstoxService
+from app.utils.calculations import get_option_chain_data, calculate_margin_and_premium
+from app.models.option_chain import OptionChainData
+from app.services.fyers import FyersService
 
 router = APIRouter()
 
