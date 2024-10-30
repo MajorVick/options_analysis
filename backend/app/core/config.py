@@ -2,9 +2,12 @@
 from pydantic import BaseSettings
 
 class Settings(BaseSettings):
-    UPSTOX_API_KEY: str
-    UPSTOX_API_SECRET: str
-    UPSTOX_ACCESS_TOKEN: str
+    FYERS_CLIENT_ID: str
+    FYERS_CLIENT_ID_HASH: str
+    FYERS_REFRESH_TOKEN: str
+    FYERS_PIN: str
+    FYERS_ACCESS_TOKEN: str = ""
+    FYERS_TOKEN_EXPIRES_AT: int = 0
 
     class Config:
         env_file = ".env"

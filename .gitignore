@@ -1,0 +1,4 @@
+# .gitignore
+.env
+fyers_tokens.json
+symbol_cache.json
