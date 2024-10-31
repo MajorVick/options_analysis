@@ -5,6 +5,7 @@ import requests
 import time
 import json
 import os
+import pandas as pd
 from app.core.config import settings
 
 class FyersService:
@@ -19,7 +20,7 @@ class FyersService:
         self.access_token = settings.FYERS_ACCESS_TOKEN       # Will be updated dynamically
         self.token_expires_at = settings.FYERS_TOKEN_EXPIRES_AT  # Unix timestamp
 
-        self.fyers = None
+        self.fyers = fyersModel.FyersModel(client_id=self.client_id, token=self.access_token,is_async=False, log_path="")
         print("Initializing FyersService...")
         self.authenticate()
 
@@ -105,3 +106,32 @@ class FyersService:
             for key, value in env_vars.items():
                 f.write(f"{key}={value}\n")
         print(".env file updated with new tokens.")
+    
+    def get_option_chain(self, symbol, strike_count):
+        # Prepare data for the API call
+        data = {
+            "symbol": symbol,
+            "strikecount": strike_count,
+            "timestamp": ""
+        }
+
+        # Make the API call
+        response = self.fyers.optionchain(data=data)
+        
+        # Check if the response was successful
+        if response.get("s") == "ok":
+            data = response["data"]
+            
+            # Convert "optionsChain" section to a DataFrame
+            options_chain_df = pd.DataFrame(data["optionsChain"])
+            
+            # Keep only the specified columns
+            options_chain_df = options_chain_df[['ask', 'bid', 'option_type', 'strike_price']]
+            
+            # Remove the first row from the options_chain_df
+            options_chain_df = options_chain_df.iloc[1:]
+            
+            return options_chain_df
+        else:
+            print("Failed to retrieve option chain data")
+            return None
