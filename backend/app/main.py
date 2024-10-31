@@ -1,7 +1,10 @@
 # backend/app/main.py
 from fastapi import FastAPI
-from .routers import option_chain
-from .core import config
+from app.routers import option_chain
+from app.core import config
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(
     title="Options Trading Analysis API",
