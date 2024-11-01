@@ -19,7 +19,7 @@ def get_symbol_name(instrument_name: str, expiry_date: str, side: str) -> str:
         df = script.T
         
         # Select and filter columns
-        df = df[['optType', 'underSym', 'expiryDate']]
+        df = df[['optType', 'underSym', 'expiryDate', 'minLotSize']]
         df = df[df['optType'] != 'XX']
         
         # Convert and format dates
@@ -38,7 +38,8 @@ def get_symbol_name(instrument_name: str, expiry_date: str, side: str) -> str:
             
         # Get the symbol name from the original script data
         symbol_name = filtered_df.index[0]
-        return symbol_name
+        lot_size = filtered_df.loc[symbol_name, 'minLotSize']
+        return symbol_name, lot_size
         
     except Exception as e:
         print(f"Error getting symbol name: {str(e)}")
