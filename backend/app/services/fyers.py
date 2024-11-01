@@ -108,12 +108,15 @@ class FyersService:
         print(".env file updated with new tokens.")
     
     def get_option_chain(self, symbol, strike_count):
+        print(f"Fetching option chain for symbol: {symbol} with strike count: {strike_count}")
+        
         # Prepare data for the API call
         data = {
             "symbol": symbol,
             "strikecount": strike_count,
             "timestamp": ""
         }
+        print(f"Data prepared for API call: {data}")
 
         # Make the API call
         response = self.fyers.optionchain(data=data)
@@ -121,15 +124,23 @@ class FyersService:
         # Check if the response was successful
         if response.get("s") == "ok":
             data = response["data"]
+            print(f"Option chain data received")
             
             # Convert "optionsChain" section to a DataFrame
             options_chain_df = pd.DataFrame(data["optionsChain"])
+            print(f"Options chain DataFrame created")
+
+            # Filter out rows where the 'ask' column is zero
+            options_chain_df = options_chain_df[options_chain_df['ask'] != 0]
+            print(f"Options chain DataFrame after filtering out rows with 'ask' == 0")
             
             # Keep only the specified columns
-            options_chain_df = options_chain_df[['ask', 'bid', 'option_type', 'strike_price']]
+            options_chain_df = options_chain_df[['ask', 'bid', 'option_type', 'strike_price', 'symbol']]
+            print(f"Filtered options chain DataFrame: {options_chain_df.head()}")
             
             # Remove the first row from the options_chain_df
             options_chain_df = options_chain_df.iloc[1:]
+            print(f"Options chain DataFrame after removing the first row: {options_chain_df.head()}")
             
             return options_chain_df
         else:
